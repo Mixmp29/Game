@@ -26,6 +26,24 @@ class PLAYER {
 
 public:
 	float dx, dy;
+	FloatRect rect;
+	Sprite sprite;
+	
+	PLAYER(Texture &image)
+	{
+		sprite.setTexture(image);
+		rect = FloatRect(50, 40, 50, 50);
+
+		dx = dy = 0;
+	}
+	void update(float time)
+	{
+		rect.left += dx * time;
+		rect.top += dy * time;
+		sprite.setPosition(rect.left, rect.top);
+		dx = 0;
+		dy = 0;
+	}
 };
 
 int main() {
@@ -37,11 +55,10 @@ int main() {
   Texture t;
   t.loadFromFile("pl.jpg");
 
-  Sprite s;
-  s.setTexture(t);
-  s.setTextureRect( IntRect(0, 0, 50, 50) );
-  s.setPosition(100, 100);
 
+  PLAYER p(t); 
+
+ 
   Clock clock;
 
   RectangleShape rectangle(Vector2f(32, 32));
@@ -60,19 +77,19 @@ int main() {
     }
 
     if (Keyboard::isKeyPressed(Keyboard::Left)) {
-      s.move(-0.1*time, 0);
+      p.dx =  -0.1;
     }
 
     if (Keyboard::isKeyPressed(Keyboard::Right)) {
-      s.move(0.1*time, 0);
+      p.dx = 0.1;
     }
 
     if (Keyboard::isKeyPressed(Keyboard::Up)) {
-      s.move(0, -0.1*time);
+      p.dy = -0.1;
     }
 
     if (Keyboard::isKeyPressed(Keyboard::Down)) {
-      s.move(0, 0.1*time);
+      p.dy = 0.1;
     }
 
     window.clear();
@@ -90,7 +107,9 @@ int main() {
         window.draw(rectangle);
       }
 
-    window.draw(s);
+    p.update(time);
+
+    window.draw(p.sprite);
     window.display();
   }
   return 0;
