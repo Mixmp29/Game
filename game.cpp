@@ -25,35 +25,7 @@ String TileMap[H] = {
 class PLAYER {
 
 public:
-  float dx, dy;
-  FloatRect rect;
-  bool onGround;
-  Sprite sprite;
-  float currentFrame;
-
-  PLAYER(Texture &image) {
-    sprite.setTexture(image);
-    rect = FloatRect(7 * 32, 9 * 32, 40, 50);
-
-    dx = dy = 0.1;
-    currentFrame = 0;
-  }
-
-  void update(float time) {
-    rect.left += dx * time;
-    currentFrame += 0.005 * time;
-    if (currentFrame > 6)
-      currentFrame -= 6;
-
-    if (dx > 0)
-      sprite.setTextureRect(IntRect(40 * int(currentFrame), 244, 40, 50));
-    if (dx < 0)
-      sprite.setTextureRect(IntRect(40 * int(currentFrame) + 40, 244, -40, 50));
-
-    sprite.setPosition(rect.left - offsetX, rect.top - offsetY);
-
-    dx = 0;
-  }
+	float dx, dy;
 };
 
 int main() {
@@ -67,6 +39,7 @@ int main() {
 
   Sprite s;
   s.setTexture(t);
+  s.setTextureRect( IntRect(0, 0, 50, 50) );
   s.setPosition(100, 100);
 
   RectangleShape rectangle(Vector2f(32, 32));
