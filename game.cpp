@@ -2,6 +2,8 @@
 
 using namespace sf;
 
+float offsetX=0, offsetY=0;
+
 const int H = 12;
 const int W = 40;
 
@@ -40,7 +42,7 @@ public:
 	{
 		rect.left += dx * time;
 		rect.top += dy * time;
-		sprite.setPosition(rect.left, rect.top);
+		sprite.setPosition(rect.left - offsetX, rect.top - offsetY);
 		dx = 0;
 		dy = 0;
 	}
@@ -94,6 +96,9 @@ int main() {
 
     window.clear();
 
+    offsetX = p.rect.left - 800/2;
+    offsetY = p.rect.top - 800/2;
+
     window.clear(Color::White);
 
     for (int i = 0; i < 12; i++)
@@ -103,7 +108,7 @@ int main() {
         if (TileMap[i][j] == ' ')
           continue;
 
-        rectangle.setPosition(j * 32, i * 32);
+        rectangle.setPosition(j * 32 - offsetX, i * 32 - offsetY);
         window.draw(rectangle);
       }
 
