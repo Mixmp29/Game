@@ -2,7 +2,7 @@
 
 using namespace sf;
 
-float offsetX=0, offsetY=0;
+float offsetX = 0, offsetY = 0;
 
 const int H = 12;
 const int W = 40;
@@ -27,25 +27,46 @@ String TileMap[H] = {
 class PLAYER {
 
 public:
-	float dx, dy;
-	FloatRect rect;
-	Sprite sprite;
-	
-	PLAYER(Texture &image)
-	{
-		sprite.setTexture(image);
-		rect = FloatRect(50, 40, 50, 50);
+  float dx, dy;
+  FloatRect rect;
+  Sprite sprite;
 
-		dx = dy = 0;
-	}
-	void update(float time)
-	{
-		rect.left += dx * time;
-		rect.top += dy * time;
-		sprite.setPosition(rect.left - offsetX, rect.top - offsetY);
-		dx = 0;
-		dy = 0;
-	}
+  PLAYER(Texture &image) {
+    sprite.setTexture(image);
+    rect = FloatRect(50, 40, 50, 50);
+
+    dx = dy = 0;
+  }
+  void update(float time) {
+    rect.left += dx * time;
+    Collision(0);
+    rect.top += dy * time;
+    Collision(1);
+    sprite.setPosition(rect.left - offsetX, rect.top - offsetY);
+    dx = 0;
+    dy = 0;
+  }
+
+  void Collision(int dir) {
+
+    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
+      for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++) {
+        if (TileMap[i][j] == 'B') {
+          if ((dx > 0) && (dir == 0))
+            rect.left = j * 32 - rect.width;
+          if ((dx < 0) && (dir == 0))
+            rect.left = j * 32 + 32;
+          if ((dy > 0) && (dir == 1)) {
+            rect.top = i * 32 - rect.height;
+            dy = 0;
+          }
+          if ((dy < 0) && (dir == 1)) {
+            rect.top = i * 32 + 32;
+            dy = 0;
+          }
+        }
+      }
+  }
 };
 
 int main() {
@@ -57,10 +78,8 @@ int main() {
   Texture t;
   t.loadFromFile("pl.jpg");
 
+  PLAYER p(t);
 
-  PLAYER p(t); 
-
- 
   Clock clock;
 
   RectangleShape rectangle(Vector2f(32, 32));
@@ -70,7 +89,7 @@ int main() {
     float time = clock.getElapsedTime().asMicroseconds();
     clock.restart();
 
-    time = time/500;
+    time = time / 500;
 
     Event event;
     while (window.pollEvent(event)) {
@@ -79,7 +98,7 @@ int main() {
     }
 
     if (Keyboard::isKeyPressed(Keyboard::Left)) {
-      p.dx =  -0.1;
+      p.dx = -0.1;
     }
 
     if (Keyboard::isKeyPressed(Keyboard::Right)) {
@@ -96,8 +115,8 @@ int main() {
 
     window.clear();
 
-    offsetX = p.rect.left - 800/2;
-    offsetY = p.rect.top - 800/2;
+    offsetX = p.rect.left - 800 / 2;
+    offsetY = p.rect.top - 800 / 2;
 
     window.clear(Color::White);
 
