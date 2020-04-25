@@ -120,8 +120,8 @@ int main() {
 
     window.clear(Color::White);
 
-    for (int i = 0; i < 12; i++)
-      for (int j = 0; j < 30; j++) {
+    for (int i = 0; i < H; i++)
+      for (int j = 0; j < W; j++) {
         if (TileMap[i][j] == 'B')
           rectangle.setFillColor(Color::Black);
         if (TileMap[i][j] == ' ')
