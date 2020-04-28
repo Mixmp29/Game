@@ -30,18 +30,28 @@ public:
   float dx, dy;
   FloatRect rect;
   Sprite sprite;
+  float currentFrame;
 
   PLAYER(Texture &image) {
     sprite.setTexture(image);
-    rect = FloatRect(50, 40, 50, 50);
+    rect = FloatRect(50, 40, 29, 29);
 
-    dx = dy = 0;
+    dx = dy = 0.1;
   }
   void update(float time) {
     rect.left += dx * time;
     Collision(0);
     rect.top += dy * time;
     Collision(1);
+
+    currentFrame += 0.005*time;
+    if (currentFrame>3) currentFrame -=3;
+
+    if (dy<0) sprite.setTextureRect(IntRect(2+32*int(currentFrame),4,29,29));
+    if (dy>0) sprite.setTextureRect(IntRect(2+32*int(currentFrame),68,29,29));
+    if (dx<0) sprite.setTextureRect(IntRect(2+32*int(currentFrame),36,29,29));
+    if (dx>0) sprite.setTextureRect(IntRect(2+32*int(currentFrame),100,29,29));
+
     sprite.setPosition(rect.left - offsetX, rect.top - offsetY);
     dx = 0;
     dy = 0;
@@ -76,7 +86,13 @@ int main() {
   MyCircle.setFillColor(Color::Green);
 
   Texture t;
-  t.loadFromFile("pl.jpg");
+  t.loadFromFile("hero.png");
+
+  float currentFrame=0;
+
+  Sprite s;
+  s.setTexture(t);
+  s.setTextureRect(IntRect(2,4,29,29));
 
   PLAYER p(t);
 
@@ -107,6 +123,7 @@ int main() {
 
     if (Keyboard::isKeyPressed(Keyboard::Up)) {
       p.dy = -0.1;
+
     }
 
     if (Keyboard::isKeyPressed(Keyboard::Down)) {
