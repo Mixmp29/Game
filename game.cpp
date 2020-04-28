@@ -37,6 +37,7 @@ public:
     rect = FloatRect(50, 40, 29, 29);
 
     dx = dy = 0.1;
+    currentFrame = 0;
   }
   void update(float time) {
     rect.left += dx * time;
@@ -89,10 +90,6 @@ int main() {
   t.loadFromFile("hero.png");
 
   float currentFrame=0;
-
-  Sprite s;
-  s.setTexture(t);
-  s.setTextureRect(IntRect(2,4,29,29));
 
   PLAYER p(t);
 
